@@ -42,8 +42,10 @@ limitations under the License.
     <p>
       A shovel behaves like a well-written client application, which
       connects to its source and destination, reads and writes messages,
-      and copes with connection failures. In fact, Shovels use
-      <a href="https://www.rabbitmq.com/erlang-client-user-guide.html">RabbitMQ Erlang client</a> under the hood.
+      and copes with connection failures. In fact, Shovels use the
+      <a href="https://www.rabbitmq.com/erlang-client-user-guide.html">RabbitMQ Erlang</a>
+      and <a href="https://github.com/rabbitmq/rabbitmq-amqp1.0-client">RabbitMQ AMQP 1.0</a>
+      clients under the hood.
     </p>
 
     <p>
@@ -65,7 +67,7 @@ limitations under the License.
       </dd>
       <dt><strong>WAN-friendly</strong></dt>
       <dd>
-        The Shovel plugin uses AMQP 0-9-1 to communicate between brokers, and
+        The Shovel plugin uses AMQP to communicate between brokers, and
         is designed to tolerate intermittent connectivity without
         message loss.
       </dd>
@@ -75,6 +77,14 @@ limitations under the License.
         destination) it can be configured to perform any number of
         explicit methods. For example, the source queue need not exist
         initially, and can be <em>declared</em> on connect.
+      </dd>
+      <dt><strong>Supports multiple protocols</strong></dt>
+      <dd>
+        Since RabbitMQ 3.7 the shovel has support for multiple
+        protocols. Currently implemented are AMQP 0.9.1 and AMQP 1.0.
+        This means it is possible to shovel, e.g. from and AMQP 1.0
+        broker source to a RabbitMQ destination and vice versa.
+        Further protocols may be implemented in the future.
       </dd>
     </dl>
 
@@ -214,6 +224,19 @@ rabbitmq-plugins enable rabbitmq_shovel
       </tr>
     </table>
 
+    <p>
+      Note that when using AMQP 1.0 the "nodes" may still need to be created
+      outside of the shovel as the protocol does not include topology
+      creation.
+    </p>
+
+      <p>
+        Versions prior to 3.7 use a slightly different configuration format.
+        See: <a href="shovel-static-legacy.html">static shovels (legacy)</a> and
+        <a href="shovel-dynamic-legacy.html">dynamic shovels (legacy)</a> for
+        details. Static shovel created by the old format will still work
+        in 3.7+ but it is recommended to upgrade at earliest convenience.
+     </p>
     </doc:section>
 
     <doc:section name="clustering">
